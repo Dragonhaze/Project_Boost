@@ -21,6 +21,11 @@ public class Rocket : MonoBehaviour {
         Thrust();
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        
+    }
+
     private void Rotate()
     {
         float rotationspeed = rcsThrust * Time.deltaTime;
