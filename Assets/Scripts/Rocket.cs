@@ -23,7 +23,15 @@ public class Rocket : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        
+        switch (collision.gameObject.tag)
+        {
+            case "Friendly":
+                print("Friendly");
+                break;
+            default:
+                print("Ded");
+                break;
+        }
     }
 
     private void Rotate()
