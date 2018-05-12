@@ -129,7 +129,7 @@ public class Rocket : MonoBehaviour {
     private void Thrust()
     {
 
-        rigidbody.freezeRotation = true;
+        rigidbody.angularVelocity = Vector3.zero; // Quital la rotación dada por las fisicas
 
         if (Input.GetKey(KeyCode.Space))
         {
@@ -146,7 +146,6 @@ public class Rocket : MonoBehaviour {
             audioSource.Stop();
             engineExhaust.Stop();
         }
-        rigidbody.freezeRotation = false;
     } 
        
     
