@@ -8,6 +8,7 @@ public class Rocket : MonoBehaviour {
 
     Rigidbody rigidbody;
     AudioSource audioSource;
+    bool collisionDisabled = false;
 
 
     [SerializeField] float rcsThrust = 100f;
@@ -35,15 +36,33 @@ public class Rocket : MonoBehaviour {
 	void Update () {
         if(state == State.Alive)
         {
+            
             Rotate();
             Thrust();
         }
-        
+        RespondToDebugKeys();
+    }
+
+    private void RespondToDebugKeys()
+    {
+        if (!Debug.isDebugBuild)
+        {
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextScene();
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
+        {
+            collisionDisabled = !collisionDisabled;
+
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (state != State.Alive)
+        if (state != State.Alive || collisionDisabled)
         {
             return;
         }
@@ -72,12 +91,23 @@ public class Rocket : MonoBehaviour {
 
     private void LoadNextScene()
     {
-        SceneManager.LoadScene(1);
+        int currentlvl = SceneManager.GetActiveScene().buildIndex;
+        if (currentlvl+1 == SceneManager.sceneCountInBuildSettings)
+        {
+            SceneManager.LoadScene(0);
+        }
+        else
+        {
+            SceneManager.LoadScene(currentlvl + 1);
+        }
+        
+        
     }
 
     private void reloadScene()
     {
-        SceneManager.LoadScene(0);
+        int currentlvl = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentlvl);
     }
 
 
@@ -104,7 +134,7 @@ public class Rocket : MonoBehaviour {
         if (Input.GetKey(KeyCode.Space))
         {
             
-            rigidbody.AddRelativeForce(Vector3.up * mainThrust);
+            rigidbody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
             if (!audioSource.isPlaying)
             {
                 audioSource.PlayOneShot(mainEngine);
