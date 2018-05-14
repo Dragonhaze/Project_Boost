@@ -84,22 +84,30 @@ public class Rocket : MonoBehaviour {
             case "Friendly":
                 break;
             case "Finish":
-
-                audioSource.PlayOneShot(win);
-                state = State.Transcending;
-                Invoke("LoadNextScene",timeTochangeLvl);
-                winBoom.Play();
-
+                Success();
                 break;
 
             default:
-                audioSource.Stop();
-                audioSource.PlayOneShot(death);
-                state = State.Dying;
-                Invoke("reloadScene", timeTochangeLvl);
-                deathBoom.Play();
+                Fail();
                 break;
         }
+    }
+
+    private void Fail()
+    {
+        audioSource.Stop();
+        audioSource.PlayOneShot(death);
+        state = State.Dying;
+        Invoke("reloadScene", timeTochangeLvl);
+        deathBoom.Play();
+    }
+
+    private void Success()
+    {
+        audioSource.PlayOneShot(win);
+        state = State.Transcending;
+        Invoke("LoadNextScene", timeTochangeLvl);
+        winBoom.Play();
     }
 
     private void LoadNextScene()
