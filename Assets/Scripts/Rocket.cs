@@ -10,6 +10,8 @@ public class Rocket : MonoBehaviour {
     AudioSource audioSource;
     bool collisionDisabled = false;
 
+    [SerializeField] GameObject maincanvas;
+
 
     [SerializeField] float rcsThrust = 100f;
     [SerializeField] float mainThrust = 2f;
@@ -30,6 +32,11 @@ public class Rocket : MonoBehaviour {
     void Start () {
         rigidbody = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
+
+        if(SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            state = State.Transcending;
+        }
 	}
 	
 	// Update is called once per frame
@@ -41,6 +48,11 @@ public class Rocket : MonoBehaviour {
             Thrust();
         }
         RespondToDebugKeys();
+    }
+    public void menuButtonClick()
+    {
+        maincanvas.SetActive(!maincanvas.activeSelf);
+        state = State.Alive;
     }
 
     private void RespondToDebugKeys()
@@ -79,6 +91,7 @@ public class Rocket : MonoBehaviour {
                 winBoom.Play();
 
                 break;
+
             default:
                 audioSource.Stop();
                 audioSource.PlayOneShot(death);
@@ -106,8 +119,7 @@ public class Rocket : MonoBehaviour {
 
     private void reloadScene()
     {
-        int currentlvl = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(currentlvl);
+        SceneManager.LoadScene(0);
     }
 
 
@@ -129,17 +141,17 @@ public class Rocket : MonoBehaviour {
     private void Thrust()
     {
 
-        rigidbody.angularVelocity = Vector3.zero; // Quital la rotación dada por las fisicas
+        rigidbody.angularVelocity = Vector3.zero; // Quita la rotación dada por las fisicas
 
         if (Input.GetKey(KeyCode.Space))
         {
-            
+            engineExhaust.Play();
             rigidbody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
             if (!audioSource.isPlaying)
             {
                 audioSource.PlayOneShot(mainEngine);
             }
-            engineExhaust.Play();
+            
         }
         else
         {
