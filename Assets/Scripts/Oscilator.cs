@@ -16,7 +16,7 @@ public class Oscilator : MonoBehaviour {
 	
 	void Update () {
 
-        if (period <= Mathf.Epsilon) { return; } //No se deben comparar dos floats pq pueden variar minusculamente, en este caso como necesito 0 pues uso epsilon que es lo más bajo a lo qe puedo llegar
+        if (period <= Mathf.Epsilon) { return; } 
         float cycles = Time.time / period;
         const float tau = Mathf.PI * 2f ;
         float rawSinWave = Mathf.Sin(cycles * tau);

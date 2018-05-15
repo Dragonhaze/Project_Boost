@@ -49,6 +49,7 @@ public class Rocket : MonoBehaviour {
         }
         RespondToDebugKeys();
     }
+
     public void menuButtonClick()
     {
         maincanvas.SetActive(!maincanvas.activeSelf);
@@ -131,7 +132,6 @@ public class Rocket : MonoBehaviour {
     }
 
 
-
     private void Rotate()
     {
         float rotationspeed = rcsThrust * Time.deltaTime;
@@ -154,7 +154,9 @@ public class Rocket : MonoBehaviour {
         if (Input.GetKey(KeyCode.Space))
         {
             engineExhaust.Play();
+
             rigidbody.AddRelativeForce(Vector3.up * mainThrust * Time.deltaTime);
+
             if (!audioSource.isPlaying)
             {
                 audioSource.PlayOneShot(mainEngine);
